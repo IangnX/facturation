@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 
@@ -25,6 +26,7 @@ import lombok.Data;
  */
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "clients")
 public class Client {
@@ -62,5 +64,5 @@ public class Client {
     @OneToMany(fetch = FetchType.LAZY, mappedBy= "client")
    private  List<Sale> sale;
     
-
+ private static final long serialVersionUID = 1L;
 }

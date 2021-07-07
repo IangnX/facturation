@@ -8,13 +8,18 @@ package com.fioxin.springboot.facturation.app.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -28,7 +33,6 @@ import lombok.NoArgsConstructor;
  */
 
 @Data
-@NoArgsConstructor
 @Entity
 @Table(name = "sales")
 public class Sale implements Serializable {
@@ -60,8 +64,21 @@ public class Sale implements Serializable {
     @ManyToOne(fetch =FetchType.LAZY)
     private Client client;
     
+    @OneToMany(fetch =  FetchType.LAZY, cascade = CascadeType.ALL) //cascade al eliminar una factura se eliminan sus detalles. Lo mismo que al guardarla
+    @JoinColumn(name = "sale_id" ) // al no tener el mapeo inverso.Se creara el campo sale_id en la tabla detail_sale
+    private List<DetailSale> detailSale;
+
+    public Sale() {
+        detailSale = new ArrayList<>();
+        
+    }
+   
     @PrePersist
     public void prePersist(){
         this.createdAt = LocalDate.now();
     }
+    
+    
+    
+    private static final long serialVersionUID = 1L;
 }
